@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1357899446",
+    "hash" : "0",
     "id" : "599DCF2A",
     "lastKnownWriteTime" : 1590179162,
     "last_content_update" : 1590179162,
     "path" : "D:/kim-blog/index.Rmd",
     "project_path" : "index.Rmd",
     "properties" : {
+        "cursorPosition" : "5,0",
+        "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
