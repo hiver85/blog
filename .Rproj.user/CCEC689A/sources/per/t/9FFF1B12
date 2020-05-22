@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590179169771.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2171102530",
+    "id" : "9FFF1B12",
+    "lastKnownWriteTime" : 1590179163,
+    "last_content_update" : 1590179163,
+    "path" : "~/Projects/rstudio/kim-blog/_site.yml",
+    "project_path" : "_site.yml",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "yaml"
+}

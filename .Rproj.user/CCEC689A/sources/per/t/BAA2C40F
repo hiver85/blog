@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590179169662.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1863708126",
+    "id" : "BAA2C40F",
+    "lastKnownWriteTime" : 1590179163,
+    "last_content_update" : 1590179163,
+    "path" : "~/Projects/rstudio/kim-blog/about.Rmd",
+    "project_path" : "about.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

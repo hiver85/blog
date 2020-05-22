@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590179534246.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3645985129",
+    "id" : "5981EADA",
+    "lastKnownWriteTime" : 1590179599,
+    "last_content_update" : 1590179599761,
+    "path" : "~/Projects/rstudio/kim-blog/projects/prj2/Prj2_Appointment_2.Rmd",
+    "project_path" : "projects/prj2/Prj2_Appointment_2.Rmd",
+    "properties" : {
+        "cursorPosition" : "116,11",
+        "scrollLine" : "110"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

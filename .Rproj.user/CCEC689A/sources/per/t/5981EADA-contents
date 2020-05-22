@@ -1,0 +1,330 @@
+---
+title: An R Markdown document converted from "projects/prj2/Prj2_Appointment_2.ipynb"
+output: html_document
+---
+
+# Project: Investigate the No-show appointment dataset
+
+## Table of Contents
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#wrangling">Data Wrangling</a></li>
+<li><a href="#eda">Exploratory Data Analysis</a></li>
+<li><a href="#conclusions">Conclusions</a></li>
+</ul>
+
+<a id='intro'></a>
+## Introduction
+
+> Context: A person makes a doctor appointment, receives all the instructions and no-show. 
+
+> Question: What factors will keep them to be present more regularly
+
+> Dataset description: 110.527 records and 14 features (characteristics). 
+
+> Features meaning:
+   - 01 - PatientId             Identification of a patient
+   - 02 - AppointmentID         Identification of each appointment
+   - 03 - Gender                Male or Female . Female is the greater proportion. Woman takes way more care of they health in comparison to man.
+   - 04 - ScheduledDay         The day of the actuall appointment, when they have to visit the doctor.
+   - 05 - AppointmentDay        The day someone called or registered the appointment, this is before appointment of course.
+   - 06 - Age                  How old is the patient.
+   - 07 - Neighbourhood        Where the appointment takes place.
+   - 08 - Scholarship          True of False 
+   - 09 - Hipertension         True or False
+   - 10 - Diabetes             True or False
+   - Alcoholism                True or False
+   - Handcap                   True or False
+   - SMS_received              1 or more messages sent to the patient.
+   - No-show                   True or False.
+
+```{python}
+
+import pandas as pd 
+import numpy as np 
+import matplotlib.pyplot as plt
+import seaborn as sns
+#%matplotlib inline
+
+from datetime import datetime
+```
+
+```{python}
+df = pd.read_csv("appointments.csv", sep = ',')
+```
+
+<a id='wrangling'></a>
+## Data Wrangling
+
+```{python}
+df.shape
+```
+
+```{python}
+df.info()
+```
+
+```{python}
+print (type(df.AppointmentDay[0]), df.AppointmentDay[0])
+```
+
+```{python}
+print (type(df.ScheduledDay[0]), df.ScheduledDay[0])
+```
+
+```{python}
+df.nunique()
+```
+
+### Data Cleaning
+- Drop some AppointmentID features which is not interesting
+- Rename No-show to NoShow for unifying the naming
+- The AppointmentDay and ScheduledDay is string ==> convert to datetime 
+- Indeed, handicap has only 2 values True / False => modify to 0, 1 
+- It's better to convert No-show and gender to int (0,1) for easy processing 
+
+```{python}
+#Drop some not interesting features
+df.drop(['AppointmentID'],axis=1, inplace= True)
+```
+
+```{python}
+# fixe the name
+#df.rename(columns = lambda x: x.strip().lower().replace("-","_"), inplace = True)
+df.rename(columns = {'SMS_received':'SMSReceived', 'No-show':'NoShow'}, inplace = True)
+df.info()
+```
+
+```{python}
+#Convert to date time
+df.AppointmentDay = pd.to_datetime(df.AppointmentDay)
+df.ScheduledDay = pd.to_datetime(df.ScheduledDay)
+```
+
+```{python}
+df.Handcap.value_counts()
+```
+
+```{python}
+df.Handcap.replace([2,3,4],1, inplace=True)
+df.Handcap.value_counts()
+```
+
+```{python}
+sum(df.duplicated())
+```
+
+```{python}
+df.describe()
+```
+
+- Age can not be negative ==> Fix age min from -1 to 0 
+
+```{python}
+df.Age.replace(-1,0, inplace=True)
+df.describe()
+```
+
+```{python}
+df.Neighbourhood.nunique()
+```
+
+```{python}
+#Neighbourhood seems not interesting
+df.drop(['Neighbourhood'],axis=1, inplace=True)
+```
+
+```{python}
+df.Neighbourhood.value_counts()
+```
+
+<a id='eda'></a>
+## Exploratory Data Analysis
+
+```{python}
+df.info()
+```
+
+```{python}
+df.hist(figsize=(12,10))
+```
+
+```{python}
+fig, axes = plt.subplots(1, 2)
+
+df.Gender.hist(label='Gender', figsize=(8, 2), ax=axes[0])
+df.NoShow.hist(label='No Show', figsize=(8, 2), ax=axes[1])
+axes[0].set_title('Gender')
+axes[1].set_title('No Show')
+```
+
+#### Observation:
+- Number of normal people are much many than people with an ill (alcoholism, ...)
+- There are fews scholarship
+- There are 1/3 patients receive sms
+- There are 1/3 patients are men
+- There are 1/4 patients absent from appointment
+- Most of patients are younger than 55
+
+### Questions : 
+<ul>
+<li><a href="#Q1">1. Which feature / factor are the most associated with the present from appointment ?</a></li>
+<li><a href="#Q2">2. Is waiting time, day of appointment associated with the present of patients</a></li>
+</ul>
+
+<a id='Q1'></a>
+### Question 1 : 
+Which feature / factor are the most associated with the presence of patients from appointment ?
+
+```{python}
+def plot_by_col(col_name):
+    fig, axes = plt.subplots(1, 2)
+
+    df[col_name][present].hist(label = 'present', figsize=(8,2), ax=axes[0])
+    df[col_name][absent].hist(alpha = 0.7,  label = 'absent', figsize=(8,2),  ax=axes[1]  )
+    axes[0].set_title(f"Present  by {col_name}")
+    axes[1].set_title(f"Absent by {col_name}")   
+    axes[0].legend()
+    axes[1].legend()
+```
+
+```{python}
+present = df.NoShow == 'No'
+absent = df.NoShow == 'Yes'
+```
+
+```{python}
+df1 = df[df.NoShow == 'Yes'].groupby('PatientId')
+absent_regular = df1.filter(lambda x: x['NoShow'].count() > 8)
+```
+
+```{python}
+plot_by_col("Gender")
+```
+
+#### Observation:
+- The presence group and absence group have the same gender distribution
+
+```{python}
+absent_regular.groupby('Gender')['NoShow'].count().plot(kind='bar', figsize=(4,2), legend=True,tick_label = 1)
+```
+
+- Men absent more frequently than women
+
+```{python}
+df.Age[present].hist(label = 'present')
+df.Age[absent].hist(alpha = 0.5,  label = 'absent' )
+plt.legend()
+plt.title("Present and absent by age")
+```
+
+#### Observation:
+- From 60 year olds, less absent and more present while in the younger group, it's not clearly to see the difference between absence and presence by age. 
+     - -->People more than 60 year olds present more often than younger people. 
+
+```{python}
+plot_by_col("Scholarship")
+```
+
+```{python}
+absent_regular.groupby('Scholarship')['NoShow'].count().plot(kind='bar', figsize=(4,2), legend=True,tick_label = 1)
+```
+
+```{python}
+plot_by_col("Hipertension")
+```
+
+```{python}
+absent_regular.groupby('Hipertension')['NoShow'].count().plot(kind='bar', figsize=(4,2), legend=True,tick_label = 1)
+```
+
+```{python}
+plot_by_col("Alcoholism")
+```
+
+```{python}
+absent_regular.groupby('Alcoholism')['NoShow'].count().plot(kind='bar', figsize=(4,2), legend=True,tick_label = 1)
+```
+
+```{python}
+plot_by_col("Handcap")
+```
+
+```{python}
+absent_regular.groupby('Handcap')['NoShow'].count().plot(kind='bar', figsize=(4,2), legend=True,tick_label = 1)
+```
+
+- The presence group and absence group have the same distribution for all illness.
+   - Having illness wouldn't ensure that they will keep the appointment schedules but it's clearly that they will not absent too much.
+
+```{python}
+plot_by_col('SMSReceived')
+```
+
+#### Observation:
+- Receiving SMS doesn't influence the presence at appointment of patients
+
+<a id='Q2'></a>
+### Question 2:
+Is waiting time, day of appointment associated with the present of patients?
+
+```{python}
+#Extract the waiting time 
+import datetime as dt
+df.WatingTime = df.AppointmentDay - df.ScheduledDay
+df.WatingTime = df.WatingTime.dt.days
+```
+
+```{python}
+df.WatingTime.value_counts().head(2)
+```
+
+```{python}
+# There are 38563 records having ScheduledDay after AppointmentDay ==> Cannot remove them ==> Need to fix them 
+df.AppointmentDay = np.where((df.AppointmentDay - df.ScheduledDay).dt.days < 0, df.ScheduledDay, df.AppointmentDay)
+df.WatingTime = df.AppointmentDay - df.ScheduledDay
+df.WatingTime = df.WatingTime.dt.days
+```
+
+```{python}
+# Verify 
+df.WatingTime.value_counts().head(2)
+```
+
+```{python}
+df.WatingTime.value_counts().describe()
+```
+
+```{python}
+bin_values = [1,30,60,90,43781]
+bin_names = ['< 1month','< 2months','< 3months','>3 months' ]
+df['WatingTime_Range'] = pd.cut(df.WatingTime, bin_values, labels = bin_names)
+df['WatingTime_Range'].value_counts()
+```
+
+```{python}
+# Extract week day 
+df['ScheduledDay_DOW'] = df['ScheduledDay'].apply(lambda x: dt.datetime.strftime(x, '%A'))
+```
+
+```{python}
+df[present].groupby('WatingTime_Range')['NoShow'].count().plot(kind = 'bar')
+```
+
+```{python}
+df[df.NoShow == 0].groupby('ScheduledDay_DOW')['NoShow'].count().plot(kind = 'bar')
+```
+
+#### Observation:
+- The waiting time influences a lot the present of patients 
+- The day of appointment doesn't show strongly influence. However, we can see that, people book on from Monday to Wednesday are more likely go for appointment than on Thursday or Friday
+
+<a id='conclusions'></a>
+## Conclusions
+
+- There are 3 important factors and a supporting factor which influence the presence of patients for their appointment:
+    - Waiting time should be shorter
+    - Aging people will present more than others
+    - The day of appointment: Patient will be present more from Monday to Wednesday
+    - Supporting: People with illness, having scholarship will not likely to be absent so much
+

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590179208905.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "506367755",
+    "id" : "9A661FF9",
+    "lastKnownWriteTime" : 1590179218,
+    "last_content_update" : 1590179218006,
+    "path" : "~/Projects/rstudio/kim-blog/_posts/2020-05-22-introduction/introduction.Rmd",
+    "project_path" : "_posts/2020-05-22-introduction/introduction.Rmd",
+    "properties" : {
+        "cursorPosition" : "10,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
