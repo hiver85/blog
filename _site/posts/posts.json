@@ -2,7 +2,7 @@
   {
     "path": "posts/welcome/",
     "title": "Welcome to Kim - A data journey",
-    "description": "Welcome to our new blog, Kim - A data journey. We hope you enjoy \nreading what we have to say!",
+    "description": "Welcome to my new blog, Kim - A data journey. This blog includes the projects I completed from the Udacity 3 month-program in 1 month. I hope you enjoy reading!",
     "author": [
       {
         "name": "kim",
@@ -12,6 +12,6 @@
     "date": "2020-05-22",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-05-22T17:37:16-04:00"
+    "last_modified": "2020-05-22T23:07:06-04:00"
   }
 ]
