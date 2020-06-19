@@ -1,9 +1,0 @@
----
-title: "About this blog"
-description: |
-  A software engineer on the way of pursuing her hobbies in data analysing
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
